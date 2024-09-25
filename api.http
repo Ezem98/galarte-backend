@@ -1,0 +1,50 @@
+# GET USERS
+GET http://localhost:1234/users HTTP/1.1
+
+###
+
+# GET USER BY USERNAME
+GET http://localhost:1234/users/ezem98 HTTP/1.1
+
+###
+
+# POST USER
+POST  http://localhost:1234/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "ezem98",
+  "email": "ezem98@example.com",
+  "password": "min8chars",
+  "experienceLevel": 1
+}
+
+###
+
+# UPDATE USER
+PATCH  http://localhost:1234/users/ezem98 HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "ezem98@test.com"
+}
+
+###
+
+# DELETE USER
+DELETE  http://localhost:1234/users/ezem98 HTTP/1.1
+
+###
+
+# POST STEPS
+POST http://localhost:1234/openai HTTP/1.1
+Content-Type: application/json
+
+{
+  "modelName": "pared de ladrillo",
+  "modelSize": {
+    "width": 200,
+    "height": 100
+  },
+  "experienceLevel": 1
+}
