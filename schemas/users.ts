@@ -6,6 +6,7 @@ export const userSchema = z.object({
     username: z.string().min(6, 'Username must be at least 6 characters'),
     email: z.string().email('Invalid email format'),
     password: z.string().min(8, 'Password must contain at least 8 characters'),
+    image: z.string().optional(),
     experienceLevel: z
         .number()
         .int()

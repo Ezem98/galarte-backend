@@ -1,6 +1,6 @@
 import { CloudinaryModel } from '../models/cloudinary.ts'
-import { db } from '../turso.ts'
 import { IUser } from '../types/user.ts'
+import { db } from '../utils/consts.ts'
 import { generatePassword } from '../utils/functions.ts'
 
 export class UserModel {
@@ -82,7 +82,7 @@ export class UserModel {
                     {
                         sql: `
                             INSERT INTO users (username, email, password, password_salt, image, experience_level) VALUES
-                            (?, ?, ?, ?);
+                            (?, ?, ?, ?, ?, ?);
                         `,
                         args: [
                             username,
@@ -116,23 +116,32 @@ export class UserModel {
     }
 
     static async update(currentUserName: string, partialUser: Partial<IUser>) {
-        const { username, email, password, experienceLevel } = partialUser
+        const { username, email, password, image, experienceLevel } =
+            partialUser
 
-        let hash: string | undefined, salt: string | undefined
-
-        if (password) {
-            const result = generatePassword(password)
-            hash = result.hash
-            salt = result.salt
-        }
+        let hash: string | undefined,
+            salt: string | undefined,
+            imageUrl: string | undefined
 
         try {
-            const currentUser = (
-                await db.execute({
-                    sql: 'SELECT * FROM users WHERE username = ?',
-                    args: [currentUserName],
-                })
-            ).rows[0]
+            if (password) {
+                const result = generatePassword(password)
+                hash = result.hash
+                salt = result.salt
+            }
+
+            if (image)
+                imageUrl = await CloudinaryModel.uploadImage(
+                    image,
+                    `${username}-profile-image`
+                )
+
+            const { data: currentUser } = await this.getByUsername(
+                currentUserName
+            )
+
+            if (!currentUser)
+                return { successfully: false, message: 'User not found' }
 
             await db.batch(
                 [
@@ -142,6 +151,7 @@ export class UserModel {
                             email = ?,
                             password = ?,
                             password_salt = ?,
+                            image = ?,
                             experience_level = ?
                         WHERE
                             username = ?;`,
@@ -149,8 +159,9 @@ export class UserModel {
                             username ?? currentUser.username,
                             email ?? currentUser.email,
                             hash ?? currentUser.password,
-                            salt ?? currentUser.passwordSalt,
-                            experienceLevel ?? currentUser.experienceLevel,
+                            salt ?? currentUser.password_salt,
+                            imageUrl ?? currentUser.image,
+                            experienceLevel ?? currentUser.experience_level,
                             currentUserName,
                         ],
                     },
@@ -158,12 +169,9 @@ export class UserModel {
                 'write'
             )
 
-            const updatedUser = (
-                await db.execute({
-                    sql: 'SELECT * FROM users WHERE username = ?',
-                    args: [username ?? currentUserName],
-                })
-            ).rows[0]
+            const updatedUser = await this.getByUsername(
+                username ?? currentUserName
+            )
 
             return {
                 successfully: true,

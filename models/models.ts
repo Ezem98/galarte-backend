@@ -1,5 +1,5 @@
-import { db } from '../turso.ts'
 import { IModel } from '../types/model.ts'
+import { db } from '../utils/consts.ts'
 import { CloudinaryModel } from './cloudinary.ts'
 
 export class ModelModel {
