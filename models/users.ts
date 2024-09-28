@@ -1,5 +1,6 @@
 import { db } from '../turso.ts'
 import { IUser } from '../types/user.ts'
+import { generatePassword } from '../utils/functions.ts'
 
 export class UserModel {
     static async getAll() {
@@ -51,6 +52,8 @@ export class UserModel {
         try {
             const { username, email, password, experienceLevel } = newUser
 
+            const { hash, salt } = generatePassword(password)
+
             await db.batch(
                 [
                     `
@@ -59,16 +62,17 @@ export class UserModel {
                                 username TEXT NOT NULL UNIQUE,
                                 email TEXT NOT NULL UNIQUE,
                                 password TEXT NOT NULL,
+                                password_salt TEXT NOT NULL,
                                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                                 experience_level INTEGER
                             );
                         `,
                     {
                         sql: `
-                            INSERT INTO users (username, email, password, experience_level) VALUES
+                            INSERT INTO users (username, email, password, password_salt, experience_level) VALUES
                             (?, ?, ?, ?);
                         `,
-                        args: [username, email, password, experienceLevel],
+                        args: [username, email, hash, salt, experienceLevel],
                     },
                 ],
 
@@ -95,6 +99,14 @@ export class UserModel {
     static async update(currentUserName: string, partialUser: Partial<IUser>) {
         const { username, email, password, experienceLevel } = partialUser
 
+        let hash: string | undefined, salt: string | undefined
+
+        if (password) {
+            const result = generatePassword(password)
+            hash = result.hash
+            salt = result.salt
+        }
+
         try {
             const currentUser = (
                 await db.execute({
@@ -110,13 +122,15 @@ export class UserModel {
                         SET username = ?,
                             email = ?,
                             password = ?,
+                            password_salt = ?,
                             experience_level = ?
                         WHERE
                             username = ?;`,
                         args: [
                             username ?? currentUser.username,
                             email ?? currentUser.email,
-                            password ?? currentUser.password,
+                            hash ?? currentUser.password,
+                            salt ?? currentUser.password_salt,
                             experienceLevel ?? currentUser.experience_level,
                             currentUserName,
                         ],
