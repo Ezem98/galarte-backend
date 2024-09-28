@@ -112,10 +112,9 @@ export class ModelModel {
         }
     }
 
-    static async update(id: number, partialUser: Partial<IModel>) {
-        const { name, description, data, image, difficultyRating } = partialUser
-
-        let hash: string | undefined, salt: string | undefined
+    static async update(id: number, partialModel: Partial<IModel>) {
+        const { name, description, data, image, difficultyRating } =
+            partialModel
 
         let modelDataUrl: string | undefined, imageUrl: string | undefined
 
@@ -153,8 +152,8 @@ export class ModelModel {
                         args: [
                             name ?? currentModel.model,
                             description ?? currentModel.description,
-                            data ?? currentModel.data,
-                            image ?? currentModel.image,
+                            modelDataUrl ?? currentModel.data,
+                            imageUrl ?? currentModel.image,
                             difficultyRating ?? currentModel.difficultyRating,
                             id,
                         ],
