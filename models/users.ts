@@ -1,3 +1,4 @@
+import { CloudinaryModel } from '../models/cloudinary.ts'
 import { db } from '../turso.ts'
 import { IUser } from '../types/user.ts'
 import { generatePassword } from '../utils/functions.ts'
@@ -48,11 +49,20 @@ export class UserModel {
         }
     }
 
-    static async create(newUser: IUser) {
+    static async create(newUser: Omit<IUser, 'passwordSalt'>) {
         try {
-            const { username, email, password, experienceLevel } = newUser
+            const { username, email, password, experienceLevel, image } =
+                newUser
 
             const { hash, salt } = generatePassword(password)
+
+            let imageUrl: string | undefined
+
+            if (image)
+                imageUrl = await CloudinaryModel.uploadImage(
+                    image,
+                    `${username}-profile-image`
+                )
 
             await db.batch(
                 [
@@ -63,16 +73,25 @@ export class UserModel {
                                 email TEXT NOT NULL UNIQUE,
                                 password TEXT NOT NULL,
                                 password_salt TEXT NOT NULL,
+                                image TEXT,
+                                experience_level INTEGER,
                                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                                experience_level INTEGER
+                                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                             );
                         `,
                     {
                         sql: `
-                            INSERT INTO users (username, email, password, password_salt, experience_level) VALUES
+                            INSERT INTO users (username, email, password, password_salt, image, experience_level) VALUES
                             (?, ?, ?, ?);
                         `,
-                        args: [username, email, hash, salt, experienceLevel],
+                        args: [
+                            username,
+                            email,
+                            hash,
+                            salt,
+                            imageUrl ?? null,
+                            experienceLevel,
+                        ],
                     },
                 ],
 
@@ -130,8 +149,8 @@ export class UserModel {
                             username ?? currentUser.username,
                             email ?? currentUser.email,
                             hash ?? currentUser.password,
-                            salt ?? currentUser.password_salt,
-                            experienceLevel ?? currentUser.experience_level,
+                            salt ?? currentUser.passwordSalt,
+                            experienceLevel ?? currentUser.experienceLevel,
                             currentUserName,
                         ],
                     },

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { UserModel } from '../models/users.ts'
-import { validPartialUserData, validUserData } from '../schemas/user.ts'
+import { validPartialUserData, validUserData } from '../schemas/users.ts'
 
 export class UserController {
     static async getAll(req: Request, res: Response) {

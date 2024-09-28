@@ -1,4 +1,5 @@
 import z from 'zod'
+import { ExperienceLevel } from '../enums/experienceLevel.ts'
 import { IUser } from '../types/user.ts'
 
 export const userSchema = z.object({
@@ -8,8 +9,8 @@ export const userSchema = z.object({
     experienceLevel: z
         .number()
         .int()
-        .min(1, 'Experience level must be at least 1')
-        .max(3, 'Experience level must be at most 3'),
+        .min(ExperienceLevel.BEGINNER, 'Experience level must be at least 1')
+        .max(ExperienceLevel.ADVANCED, 'Experience level must be at most 3'),
 })
 
 export const validUserData = (userData: IUser) => {
