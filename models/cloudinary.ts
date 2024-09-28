@@ -19,6 +19,6 @@ export class CloudinaryModel {
             })
 
         console.log(uploadResult)
-        return uploadResult
+        return uploadResult.secure_url
     }
 }
