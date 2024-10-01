@@ -1,5 +1,7 @@
 import cors from 'cors'
 import express from 'express'
+import fileUpload from 'express-fileupload'
+import { modelsRouter } from './routes/models.ts'
 import { openAIRouter } from './routes/openAI.ts'
 import { usersRouter } from './routes/users.ts'
 
@@ -10,6 +12,13 @@ app.disable('x-powered-by')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
+app.use(
+    fileUpload({
+        limits: { fileSize: 50 * 1024 * 1024 },
+        useTempFiles: true,
+        tempFileDir: '/tmp/',
+    })
+)
 
 app.get('/', (req, res) => {
     res.send('Página de inicio')
@@ -20,6 +29,9 @@ app.use('/users', usersRouter)
 
 //region Rutas de OpenAI
 app.use('/openai', openAIRouter)
+
+//region Rutas de modelos
+app.use('/models', modelsRouter)
 
 //agregar un middleware para validar la sesión del usuario
 

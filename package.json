@@ -20,10 +20,12 @@
     "homepage": "https://github.com/Ezem98/buildear-backend#readme",
     "dependencies": {
         "@libsql/client": "0.14.0",
+        "@types/express-fileupload": "^1.5.1",
         "cloudinary": "^2.5.0",
         "cors": "2.8.5",
         "dotenv": "16.4.5",
         "express": "4.21.0",
+        "express-fileupload": "^1.5.1",
         "openai": "4.63.0",
         "zod": "3.23.8"
     },

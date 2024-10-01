@@ -29,8 +29,35 @@ export class ModelController {
     }
 
     static async create(req: Request, res: Response) {
-        const { body } = req
-        const validationResult = validModelData(body)
+        const { body, files } = req
+        if (!req.files || Object.keys(req.files).length === 0)
+            return res.status(400).send('No se encontró archivo .obj')
+
+        console.log({ body, files })
+        const fileToUpload = req.files.modelData // Campo de archivo
+
+        // Verificar si el archivo es un único UploadedFile
+        if (Array.isArray(fileToUpload))
+            return res
+                .status(400)
+                .send('Multiple files were uploaded. Only one expected.')
+
+        // Validar la extensión del archivo
+        const validExtension = '.obj'
+        const fileExtension = fileToUpload.name.split('.').pop()
+
+        if (fileExtension !== validExtension)
+            return res
+                .status(400)
+                .send(
+                    `Extensión de archivo inválida. Solo se permiten archivos con extensión ${validExtension}.`
+                )
+
+        // Convertir el archivo a Base64
+        const fileBuffer = fileToUpload.data // Obtiene el buffer del archivo
+        const base64File = fileBuffer.toString('base64') // Convierte a Base64
+
+        const validationResult = validModelData({ ...body, data: base64File })
 
         if (validationResult.error)
             return res

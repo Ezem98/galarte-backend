@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { ModelController } from '../controllers/models'
+import { ModelController } from '../controllers/models.ts'
 
 export const modelsRouter = Router()
 
