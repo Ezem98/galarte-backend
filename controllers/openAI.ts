@@ -5,6 +5,7 @@ import { validOpenAIData } from '../schemas/openAI.ts'
 export class OpenAIController {
     static async generateStepsWithOpenAI(req: Request, res: Response) {
         const { body } = req
+        console.log(body)
         const validationResult = validOpenAIData(body)
 
         if (validationResult.error)
@@ -15,11 +16,11 @@ export class OpenAIController {
         const {
             successfully,
             message,
-            data: guide,
+            data
         } = await OpenAIModel.generateStepsWithOpenAI(validationResult.data)
 
         if (!successfully) return res.status(400).send({ message })
 
-        return res.json({ message, guide })
+        return res.json({ message, successfully, data })
     }
 }
