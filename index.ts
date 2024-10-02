@@ -3,6 +3,7 @@ import express from 'express'
 import fileUpload from 'express-fileupload'
 import { modelsRouter } from './routes/models.ts'
 import { openAIRouter } from './routes/openAI.ts'
+import { userModelsRouter } from './routes/userModels.ts'
 import { usersRouter } from './routes/users.ts'
 
 const port = process.env.PORT ?? 1234
@@ -32,6 +33,9 @@ app.use('/openai', openAIRouter)
 
 //region Rutas de modelos
 app.use('/models', modelsRouter)
+
+//region Rutas de modelos de usuario
+app.use('/userModels', userModelsRouter)
 
 //agregar un middleware para validar la sesión del usuario
 
