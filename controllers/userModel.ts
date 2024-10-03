@@ -9,42 +9,35 @@ export class UserModelController {
     static async getAllByUserId(req: Request, res: Response) {
         const { userId } = req.params
 
-        const {
-            successfully,
-            message,
-            data: models,
-        } = await UserModelModel.getAllByUserId(+userId)
+        const { successfully, message, data } =
+            await UserModelModel.getAllByUserId(+userId)
 
         if (!successfully) return res.status(400).send({ message })
 
-        res.json({ message, models })
+        res.json({ message, data })
     }
 
     static async getAllByModelId(req: Request, res: Response) {
         const { modelId } = req.params
 
-        const {
-            successfully,
-            message,
-            data: models,
-        } = await UserModelModel.getAllByModelId(+modelId)
+        const { successfully, message, data } =
+            await UserModelModel.getAllByModelId(+modelId)
 
         if (!successfully) return res.status(400).send({ message })
 
-        res.json({ message, models })
+        res.json({ message, data })
     }
 
     static async get(req: Request, res: Response) {
         const { userId, modelId } = req.params
 
-        const {
-            successfully,
-            message,
-            data: model,
-        } = await UserModelModel.get(+userId, +modelId)
+        const { successfully, message, data } = await UserModelModel.get(
+            +userId,
+            +modelId
+        )
 
         if (!successfully) return res.status(400).send({ message })
-        return res.json({ message, model })
+        return res.json({ message, data })
     }
 
     static async create(req: Request, res: Response) {
@@ -57,15 +50,13 @@ export class UserModelController {
                 .status(400)
                 .json({ error: JSON.parse(validationResult.error.message) })
 
-        const {
-            successfully,
-            message,
-            data: model,
-        } = await UserModelModel.create(validationResult.data)
+        const { successfully, message, data } = await UserModelModel.create(
+            validationResult.data
+        )
 
         if (!successfully) return res.status(400).send({ message })
 
-        return res.status(201).json({ message, model })
+        return res.status(201).json({ message, data })
     }
 
     static async update(req: Request, res: Response) {
@@ -80,11 +71,7 @@ export class UserModelController {
                 .status(400)
                 .json({ error: JSON.parse(validationResult.error.message) })
 
-        const {
-            successfully,
-            message,
-            data: model,
-        } = await UserModelModel.update(
+        const { successfully, message, data } = await UserModelModel.update(
             +userId,
             +modelId,
             validationResult.data
@@ -92,7 +79,7 @@ export class UserModelController {
 
         if (!successfully) return res.status(400).send({ message })
 
-        return res.status(201).json({ message, model })
+        return res.status(201).json({ message, data })
     }
 
     static async delete(req: Request, res: Response) {
