@@ -8,12 +8,12 @@ export class ModelController {
         const {
             successfully,
             message,
-            data: models,
+            data
         } = await ModelModel.getAll()
 
         if (!successfully) return res.status(400).send({ message })
 
-        res.json({ message, models })
+        res.json({ message, data })
     }
 
     static async getById(req: Request, res: Response) {
@@ -22,11 +22,11 @@ export class ModelController {
         const {
             successfully,
             message,
-            data: model,
+            data
         } = await ModelModel.getById(+id)
 
         if (!successfully) return res.status(400).send({ message })
-        return res.json({ message, model })
+        return res.json({ message, data })
     }
 
     static async getByCategoryId(req: Request, res: Response) {
@@ -35,11 +35,11 @@ export class ModelController {
         const {
             successfully,
             message,
-            data: models,
+            data
         } = await ModelModel.getByCategoryId(+categoryId)
 
         if (!successfully) return res.status(400).send({ message })
-        return res.json({ message, models })
+        return res.json({ message, data })
     }
 
     static async create(req: Request, res: Response) {
@@ -65,12 +65,12 @@ export class ModelController {
         const {
             successfully,
             message,
-            data: model,
+            data
         } = await ModelModel.create(validationResult.data)
 
         if (!successfully) return res.status(400).send({ message })
 
-        return res.status(201).json({ message, model })
+        return res.status(201).json({ message, data })
     }
 
     static async update(req: Request, res: Response) {
@@ -86,12 +86,12 @@ export class ModelController {
         const {
             successfully,
             message,
-            data: model,
+            data
         } = await ModelModel.update(+id, validationResult.data)
 
         if (!successfully) return res.status(400).send({ message })
 
-        return res.status(201).json({ message, model })
+        return res.status(201).json({ message, data })
     }
 
     static async delete(req: Request, res: Response) {
