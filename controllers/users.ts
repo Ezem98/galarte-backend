@@ -27,7 +27,7 @@ export class UserController {
     static async create(req: Request, res: Response) {
         const { body } = req
         const validationResult = validUserData(body)
-        console.log(body,validationResult)
+
         if (validationResult.error)
             return res
                 .status(400)

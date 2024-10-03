@@ -61,7 +61,8 @@ export class UserModel {
             if (image)
                 imageUrl = await CloudinaryModel.uploadImage(
                     image,
-                    `${username}-profile-image`
+                    `${username}-profile-image`,
+                    'usersImages'
                 )
 
             await db.batch(
@@ -133,7 +134,8 @@ export class UserModel {
             if (image)
                 imageUrl = await CloudinaryModel.uploadImage(
                     image,
-                    `${username}-profile-image`
+                    `${username}-profile-image`,
+                    'usersImages'
                 )
 
             const { data: currentUser } = await this.getByUsername(

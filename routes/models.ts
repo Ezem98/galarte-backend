@@ -7,6 +7,8 @@ modelsRouter.get('/', ModelController.getAll)
 
 modelsRouter.get('/:id', ModelController.getById)
 
+modelsRouter.get('/category/:categoryId', ModelController.getByCategoryId)
+
 modelsRouter.post('/', ModelController.create)
 
 modelsRouter.patch('/:id', ModelController.update)

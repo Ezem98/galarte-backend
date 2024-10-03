@@ -48,19 +48,52 @@ export class ModelModel {
         }
     }
 
+    static async getByCategoryId(categoryId: number) {
+        try {
+            const models = (
+                await db.execute({
+                    sql: 'SELECT * FROM models WHERE category_id = ?',
+                    args: [categoryId],
+                })
+            ).rows
+
+            if (!models)
+                return {
+                    successfully: false,
+                    message: 'Models not found for this category',
+                }
+
+            return {
+                successfully: true,
+                message: 'Models found',
+                data: models,
+            }
+        } catch (error: any) {
+            return { successfully: false, message: error.message }
+        }
+    }
+
     static async create(newModel: IModel) {
         try {
-            const { name, description, data, difficultyRating, image } =
-                newModel
-
-            const modelDataUrl = await CloudinaryModel.uploadImage(
+            const {
+                name,
+                description,
                 data,
-                `${name}-model-data`
-            )
+                difficultyRating,
+                image,
+                categoryId,
+            } = newModel
+
+            // const modelDataUrl = await CloudinaryModel.uploadImage(
+            //     data,
+            //     `${name}-model-data`,
+            //     'modelsData'
+            // )
 
             const imageUrl = await CloudinaryModel.uploadImage(
                 image,
-                `${name}-model-image`
+                `${name}-model-image`,
+                'modelsImages'
             )
 
             await db.batch(
@@ -72,22 +105,25 @@ export class ModelModel {
                                 description TEXT,
                                 model_data TEXT NOT NULL,
                                 model_image TEXT NOT NULL,
-                                difficulty_rating INTEGER,
+                                difficulty_rating INTEGER NOT NULL,
+                                category_id INTEGER NOT NULL,
                                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+                                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                                FOREIGN KEY (category_id) REFERENCES categories(id)
                             );
                         `,
                     {
                         sql: `
-                            INSERT INTO models (name, description, model_data, model_image, difficulty_rating) VALUES
-                            (?, ?, ?, ?);
+                            INSERT INTO models (name, description, model_data, model_image, difficulty_rating, category_id) VALUES
+                            (?, ?, ?, ?, ?, ?);
                         `,
                         args: [
                             name,
                             description ?? null,
-                            modelDataUrl,
+                            '',
                             imageUrl,
                             difficultyRating ?? null,
+                            categoryId,
                         ],
                     },
                 ],
@@ -121,13 +157,15 @@ export class ModelModel {
         if (data)
             modelDataUrl = await CloudinaryModel.uploadImage(
                 data,
-                `${name}-model-data`
+                `${name}-model-data`,
+                'modelsData'
             )
 
         if (image)
             imageUrl = await CloudinaryModel.uploadImage(
                 image,
-                `${name}-model-image`
+                `${name}-model-image`,
+                'modelsImages'
             )
 
         try {
