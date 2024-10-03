@@ -1,14 +1,14 @@
 import { Router } from 'express'
-import { ModelController } from '../controllers/models.ts'
+import { UserModelController } from '../controllers/userModel.ts'
 
 export const userModelsRouter = Router()
 
-userModelsRouter.get('/:userId', ModelController.getAll)
-userModelsRouter.get('/:modelId', ModelController.getById)
-userModelsRouter.get('/:userId/:modelId', ModelController.getById)
+userModelsRouter.get('/user/:userId', UserModelController.getAllByUserId)
+userModelsRouter.get('/model/:modelId', UserModelController.getAllByModelId)
+userModelsRouter.get('/:userId/:modelId', UserModelController.get)
 
-userModelsRouter.post('/', ModelController.create)
+userModelsRouter.post('/', UserModelController.create)
 
-userModelsRouter.patch('/:userId/:modelId', ModelController.update)
+userModelsRouter.patch('/:userId/:modelId', UserModelController.update)
 
-userModelsRouter.delete('/:userId/:modelId', ModelController.delete)
+userModelsRouter.delete('/:userId/:modelId', UserModelController.delete)
