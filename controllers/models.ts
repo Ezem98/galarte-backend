@@ -5,11 +5,7 @@ import { validModelData, validPartialModelData } from '../schemas/models.ts'
 
 export class ModelController {
     static async getAll(req: Request, res: Response) {
-        const {
-            successfully,
-            message,
-            data
-        } = await ModelModel.getAll()
+        const { successfully, message, data } = await ModelModel.getAll()
 
         if (!successfully) return res.status(400).send({ message })
 
@@ -19,11 +15,7 @@ export class ModelController {
     static async getById(req: Request, res: Response) {
         const { id } = req.params
 
-        const {
-            successfully,
-            message,
-            data
-        } = await ModelModel.getById(+id)
+        const { successfully, message, data } = await ModelModel.getById(+id)
 
         if (!successfully) return res.status(400).send({ message })
         return res.json({ message, data })
@@ -32,14 +24,23 @@ export class ModelController {
     static async getByCategoryId(req: Request, res: Response) {
         const { categoryId } = req.params
 
-        const {
-            successfully,
-            message,
-            data
-        } = await ModelModel.getByCategoryId(+categoryId)
+        const { successfully, message, data } =
+            await ModelModel.getByCategoryId(+categoryId)
 
         if (!successfully) return res.status(400).send({ message })
         return res.json({ message, data })
+    }
+
+    static async getByName(req: Request, res: Response) {
+        const { search } = req.params
+
+        const { successfully, message, data } = await ModelModel.getByName(
+            search
+        )
+
+        if (!successfully)
+            return res.status(400).send({ successfully, message })
+        return res.json({ successfully, message, data })
     }
 
     static async create(req: Request, res: Response) {
@@ -62,11 +63,9 @@ export class ModelController {
                 .status(400)
                 .json({ error: JSON.parse(validationResult.error.message) })
 
-        const {
-            successfully,
-            message,
-            data
-        } = await ModelModel.create(validationResult.data)
+        const { successfully, message, data } = await ModelModel.create(
+            validationResult.data
+        )
 
         if (!successfully) return res.status(400).send({ message })
 
@@ -83,11 +82,10 @@ export class ModelController {
                 .status(400)
                 .json({ error: JSON.parse(validationResult.error.message) })
 
-        const {
-            successfully,
-            message,
-            data
-        } = await ModelModel.update(+id, validationResult.data)
+        const { successfully, message, data } = await ModelModel.update(
+            +id,
+            validationResult.data
+        )
 
         if (!successfully) return res.status(400).send({ message })
 

@@ -65,3 +65,8 @@ Content-Type: application/json
 
 # USER MODEL
 GET http://localhost:1234/userModels/13/4 HTTP/1.1
+
+###
+
+# SEARCH MODEL
+GET http://localhost:1234/models/search/clásica HTTP/1.1

@@ -9,8 +9,8 @@ export const modelSchema = z.object({
         .min(10, 'Model description must be at least 10 characters'),
     data: z.string(),
     image: z.string(),
-    difficultyRating: z.number().positive(),
-    categoryId: z
+    difficulty_rating: z.number().positive(),
+    category_id: z
         .number()
         .int()
         .min(Categories.Roof, 'Category ID must be at least 1')

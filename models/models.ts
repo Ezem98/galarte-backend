@@ -73,15 +73,40 @@ export class ModelModel {
         }
     }
 
+    static async getByName(name: string) {
+        try {
+            const models = (
+                await db.execute({
+                    sql: 'SELECT * FROM models WHERE LOWER(name) LIKE LOWER(?)',
+                    args: [`%${name}%`],
+                })
+            ).rows
+
+            if (!models)
+                return {
+                    successfully: true,
+                    message: 'Models not found for this query',
+                }
+
+            return {
+                successfully: true,
+                message: 'Models found',
+                data: models,
+            }
+        } catch (error: any) {
+            return { successfully: false, message: error.message }
+        }
+    }
+
     static async create(newModel: IModel) {
         try {
             const {
                 name,
                 description,
                 data,
-                difficultyRating,
+                difficulty_rating,
                 image,
-                categoryId,
+                category_id,
             } = newModel
 
             // const modelDataUrl = await CloudinaryModel.uploadImage(
@@ -122,8 +147,8 @@ export class ModelModel {
                             description ?? null,
                             '',
                             imageUrl,
-                            difficultyRating ?? null,
-                            categoryId,
+                            difficulty_rating ?? null,
+                            category_id,
                         ],
                     },
                 ],
@@ -149,7 +174,7 @@ export class ModelModel {
     }
 
     static async update(id: number, partialModel: Partial<IModel>) {
-        const { name, description, data, image, difficultyRating } =
+        const { name, description, data, image, difficulty_rating } =
             partialModel
 
         let modelDataUrl: string | undefined, imageUrl: string | undefined
@@ -192,7 +217,7 @@ export class ModelModel {
                             description ?? currentModel.description,
                             modelDataUrl ?? currentModel.data,
                             imageUrl ?? currentModel.image,
-                            difficultyRating ?? currentModel.difficultyRating,
+                            difficulty_rating ?? currentModel.difficultyRating,
                             id,
                         ],
                     },

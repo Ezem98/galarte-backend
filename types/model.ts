@@ -4,8 +4,8 @@ export interface IModel {
     description: string
     data: string
     image: string
-    categoryId: number
-    difficultyRating?: number
-    createdAt?: string
-    updatedAt?: string
+    category_id: number
+    difficulty_rating?: number
+    created_at?: string
+    updated_at?: string
 }
