@@ -23,6 +23,15 @@ export class UserModelModel {
                 data: models,
             }
         } catch (error: any) {
+            if (
+                error.message ===
+                'SQLITE_UNKNOWN: SQLite error: no such table: user_models'
+            )
+                return {
+                    successfully: true,
+                    message: 'No model found for this user id',
+                }
+
             return { successfully: false, message: error.message }
         }
     }
@@ -48,6 +57,15 @@ export class UserModelModel {
                 data: models,
             }
         } catch (error: any) {
+            if (
+                error.message ===
+                'SQLITE_UNKNOWN: SQLite error: no such table: user_models'
+            )
+                return {
+                    successfully: true,
+                    message: 'No model found for this user id',
+                }
+
             return { successfully: false, message: error.message }
         }
     }
@@ -56,14 +74,14 @@ export class UserModelModel {
         try {
             const userModel = (
                 await db.execute({
-                    sql: 'SELECT * FROM user_models WHERE user_id = ? & model_id = ?',
+                    sql: `SELECT * FROM user_models WHERE user_id = ? AND model_id = ?`,
                     args: [userId, modelId],
                 })
             ).rows[0]
 
             if (!userModel)
                 return {
-                    successfully: false,
+                    successfully: true,
                     message: 'User Model not found',
                 }
 
@@ -73,7 +91,18 @@ export class UserModelModel {
                 data: userModel,
             }
         } catch (error: any) {
-            return { successfully: false, message: error.message }
+            if (
+                error.message ===
+                'SQLITE_UNKNOWN: SQLite error: no such table: user_models'
+            )
+                return {
+                    successfully: true,
+                    message: 'No model found for this user id',
+                }
+            return {
+                successfully: false,
+                message: error.message,
+            }
         }
     }
 
@@ -119,7 +148,7 @@ export class UserModelModel {
 
             const userModel = (
                 await db.execute({
-                    sql: 'SELECT * FROM models WHERE user_id = ? & model_id = ?',
+                    sql: 'SELECT * FROM user_models WHERE user_id = ? AND model_id = ?',
                     args: [userId, modelId],
                 })
             ).rows[0]
@@ -144,7 +173,7 @@ export class UserModelModel {
         try {
             const currentUserModel = (
                 await db.execute({
-                    sql: 'SELECT * FROM user_models WHERE user_id = ? & model_id = ?',
+                    sql: 'SELECT * FROM user_models WHERE user_id = ? AND model_id = ?',
                     args: [userId, modelId],
                 })
             ).rows[0]
@@ -169,7 +198,7 @@ export class UserModelModel {
 
             const updatedUserModel = (
                 await db.execute({
-                    sql: 'SELECT * FROM user_models WHERE user_id = ? & model_id = ?',
+                    sql: 'SELECT * FROM user_models WHERE user_id = ? AND model_id = ?',
                     args: [userId, modelId],
                 })
             ).rows[0]
@@ -187,7 +216,7 @@ export class UserModelModel {
     static async delete(userId: number, modelId: number) {
         try {
             await db.execute({
-                sql: 'DELETE FROM user_models WHERE user_id = ? & model_id = ?',
+                sql: 'DELETE FROM user_models WHERE user_id = ? AND model_id = ?',
                 args: [userId, modelId],
             })
 

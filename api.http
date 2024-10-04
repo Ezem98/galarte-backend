@@ -60,3 +60,8 @@ Content-Type: application/json
   "username": "ezem98",
   "password": "min8chars"
 }
+
+###
+
+# USER MODEL
+GET http://localhost:1234/userModels/13/4 HTTP/1.1

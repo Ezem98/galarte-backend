@@ -14,7 +14,7 @@ export class UserModelController {
 
         if (!successfully) return res.status(400).send({ message })
 
-        res.json({ message, data })
+        res.json({ successfully, message, data })
     }
 
     static async getAllByModelId(req: Request, res: Response) {
@@ -25,7 +25,7 @@ export class UserModelController {
 
         if (!successfully) return res.status(400).send({ message })
 
-        res.json({ message, data })
+        res.json({ successfully, message, data })
     }
 
     static async get(req: Request, res: Response) {
@@ -37,13 +37,16 @@ export class UserModelController {
         )
 
         if (!successfully) return res.status(400).send({ message })
-        return res.json({ message, data })
+        return res.json({ successfully, message, data })
     }
 
     static async create(req: Request, res: Response) {
         const { body } = req
 
-        const validationResult = validUserModelData(body)
+        const validationResult = validUserModelData({
+            ...body,
+            guide: body.guideObject,
+        })
 
         if (validationResult.error)
             return res
@@ -56,7 +59,7 @@ export class UserModelController {
 
         if (!successfully) return res.status(400).send({ message })
 
-        return res.status(201).json({ message, data })
+        return res.status(201).json({ successfully, message, data })
     }
 
     static async update(req: Request, res: Response) {
@@ -79,7 +82,7 @@ export class UserModelController {
 
         if (!successfully) return res.status(400).send({ message })
 
-        return res.status(201).json({ message, data })
+        return res.status(201).json({ successfully, message, data })
     }
 
     static async delete(req: Request, res: Response) {
@@ -90,6 +93,6 @@ export class UserModelController {
             +modelId
         )
         if (!successfully) return res.status(400).send({ message })
-        return res.send({ message })
+        return res.send({ successfully, message })
     }
 }
