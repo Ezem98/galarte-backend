@@ -8,8 +8,6 @@ export const userModelSchema = z.object({
     completed: z.boolean().default(false),
     currentStep: z.number().positive().default(1),
     guide: guideSchema,
-    data: z.string(),
-    image: z.string(),
 })
 
 export const validUserModelData = (userModelData: IUserModel) => {

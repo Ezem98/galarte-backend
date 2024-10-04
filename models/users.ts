@@ -49,9 +49,9 @@ export class UserModel {
         }
     }
 
-    static async create(newUser: Omit<IUser, 'passwordSalt'>) {
+    static async create(newUser: Omit<IUser, 'password_salt'>) {
         try {
-            const { username, email, password, experienceLevel, image } =
+            const { username, email, password, experience_level, image } =
                 newUser
 
             const { hash, salt } = generatePassword(password)
@@ -91,7 +91,7 @@ export class UserModel {
                             hash,
                             salt,
                             imageUrl ?? null,
-                            experienceLevel,
+                            experience_level,
                         ],
                     },
                 ],
@@ -117,7 +117,7 @@ export class UserModel {
     }
 
     static async update(currentUserName: string, partialUser: Partial<IUser>) {
-        const { username, email, password, image, experienceLevel } =
+        const { username, email, password, image, experience_level } =
             partialUser
 
         let hash: string | undefined,
@@ -163,7 +163,7 @@ export class UserModel {
                             hash ?? currentUser.password,
                             salt ?? currentUser.password_salt,
                             imageUrl ?? currentUser.image,
-                            experienceLevel ?? currentUser.experience_level,
+                            experience_level ?? currentUser.experience_level,
                             currentUserName,
                         ],
                     },

@@ -5,9 +5,9 @@ export interface IUser {
     username: string
     email: string
     password: string
-    passwordSalt: string
-    experienceLevel: ExperienceLevel
+    password_salt: string
+    experience_level: ExperienceLevel
     image?: string
-    createdAt?: string
-    updatedAt?: string
+    created_at?: string
+    updated_at?: string
 }

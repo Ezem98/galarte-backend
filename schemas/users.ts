@@ -7,7 +7,7 @@ export const userSchema = z.object({
     email: z.string().email('Invalid email format'),
     password: z.string().min(8, 'Password must contain at least 8 characters'),
     image: z.string().optional(),
-    experienceLevel: z
+    experience_level: z
         .number()
         .int()
         .min(ExperienceLevel.BEGINNER, 'Experience level must be at least 1')
