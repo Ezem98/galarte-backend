@@ -98,6 +98,33 @@ export class ModelModel {
         }
     }
 
+    static async getByUserId(userId: string) {
+        try {
+            const models = (
+                await db.execute({
+                    sql: 'SELECT m.* FROM models m JOIN user_models  um ON m.id = um.model_id WHERE um.user_id = ?',
+                    args: [userId],
+                })
+            ).rows
+
+            if (!models)
+                return {
+                    successfully: true,
+                    message: 'Models not found for this user id',
+                }
+
+            console.log({ models })
+
+            return {
+                successfully: true,
+                message: 'Models found',
+                data: models,
+            }
+        } catch (error: any) {
+            return { successfully: false, message: error.message }
+        }
+    }
+
     static async create(newModel: IModel) {
         try {
             const {

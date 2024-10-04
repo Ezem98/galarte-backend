@@ -8,7 +8,10 @@ modelsRouter.get('/', ModelController.getAll)
 modelsRouter.get('/:id', ModelController.getById)
 
 modelsRouter.get('/category/:categoryId', ModelController.getByCategoryId)
+
 modelsRouter.get('/search/:search', ModelController.getByName)
+
+modelsRouter.get('/user/:userId', ModelController.getByUserId)
 
 modelsRouter.post('/', ModelController.create)
 

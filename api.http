@@ -70,3 +70,8 @@ GET http://localhost:1234/userModels/13/4 HTTP/1.1
 
 # SEARCH MODEL
 GET http://localhost:1234/models/search/clásica HTTP/1.1
+
+###
+
+# MODEL BY USER ID
+GET http://localhost:1234/models/user/13 HTTP/1.1
