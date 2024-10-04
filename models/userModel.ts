@@ -43,11 +43,11 @@ export class UserModelModel {
                     sql: 'SELECT * FROM user_models WHERE model_id = ?',
                     args: [modelId],
                 })
-            ).rows[0]
+            ).rows
 
             if (!models.length)
                 return {
-                    successfully: false,
+                    successfully: true,
                     message: 'Models not found for model with that id',
                 }
 
