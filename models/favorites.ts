@@ -49,6 +49,23 @@ export class FavoriteModel {
         }
     }
 
+    static async get(userId: number, modelId: number) {
+        try {
+            const favorite = (
+                await db.execute({
+                    sql: `SELECT * FROM favorites WHERE user_id = ? AND model_id = ?`,
+                    args: [userId, modelId],
+                })
+            ).rows[0]
+
+            if (!favorite) return false
+
+            return true
+        } catch (error: any) {
+            return false
+        }
+    }
+
     static async delete(userId: string, modelId: string) {
         try {
             await db.execute({

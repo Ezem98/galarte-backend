@@ -22,6 +22,14 @@ export class FavoriteController {
         return res.status(201).json({ successfully, message, data })
     }
 
+    static async get(req: Request, res: Response) {
+        const { userId, modelId } = req.params
+
+        const isFav = await FavoriteModel.get(+userId, +modelId)
+
+        return res.status(201).send(isFav)
+    }
+
     static async delete(req: Request, res: Response) {
         const { userId, modelId } = req.params
 
