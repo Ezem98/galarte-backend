@@ -51,8 +51,16 @@ export class UserModel {
 
     static async create(newUser: Omit<IUser, 'password_salt'>) {
         try {
-            const { username, email, password, experience_level, image } =
-                newUser
+            console.log({ newUser })
+            const {
+                name,
+                surname,
+                username,
+                email,
+                password,
+                experience_level,
+                image,
+            } = newUser
 
             const { hash, salt } = generatePassword(password)
 
@@ -70,6 +78,8 @@ export class UserModel {
                     `
                             CREATE TABLE IF NOT EXISTS users (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                name TEXT NOT NULL,
+                                surname TEXT NOT NULL,
                                 username TEXT NOT NULL UNIQUE,
                                 email TEXT NOT NULL UNIQUE,
                                 password TEXT NOT NULL,
@@ -82,10 +92,12 @@ export class UserModel {
                         `,
                     {
                         sql: `
-                            INSERT INTO users (username, email, password, password_salt, image, experience_level) VALUES
-                            (?, ?, ?, ?, ?, ?);
+                            INSERT INTO users (name, surname, username, email, password, password_salt, image, experience_level) VALUES
+                            (?, ?, ?, ?, ?, ?, ?, ?);
                         `,
                         args: [
+                            name,
+                            surname,
                             username,
                             email,
                             hash,
