@@ -78,8 +78,8 @@ export class ModelController {
             ...body,
             data: '',
             image: imageToUpload.tempFilePath,
-            categoryId: +body.categoryId,
-            difficultyRating: +body.difficultyRating,
+            category_id: +body.categoryId,
+            difficulty_rating: +body.difficultyRating,
         })
 
         if (validationResult.error)
