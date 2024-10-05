@@ -63,6 +63,22 @@ Content-Type: application/json
 
 ###
 
+# CREATE FAV
+POST http://localhost:1234/favorites HTTP/1.1
+Content-Type: application/json
+
+{
+  "user_id": 13,
+  "model_id": 2
+}
+
+###
+
+# DELETE FAV
+DELETE  http://localhost:1234/favorites/1 HTTP/1.1
+
+###
+
 # USER MODEL
 GET http://localhost:1234/userModels/13/4 HTTP/1.1
 

@@ -2,6 +2,7 @@ import cors from 'cors'
 import express from 'express'
 import fileUpload from 'express-fileupload'
 import { authRouter } from './routes/auth.ts'
+import { favoritesRouter } from './routes/favorites.ts'
 import { modelsRouter } from './routes/models.ts'
 import { openAIRouter } from './routes/openAI.ts'
 import { userModelsRouter } from './routes/userModels.ts'
@@ -40,6 +41,9 @@ app.use('/userModels', userModelsRouter)
 
 //region Rutas de auth
 app.use('/auth', authRouter)
+
+//region Rutas de favoritos
+app.use('/favorites', favoritesRouter)
 
 //agregar un middleware para validar la sesión del usuario
 

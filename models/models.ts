@@ -113,8 +113,6 @@ export class ModelModel {
                     message: 'Models not found for this user id',
                 }
 
-            console.log({ models })
-
             return {
                 successfully: true,
                 message: 'Models found',
