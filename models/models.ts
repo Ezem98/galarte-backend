@@ -123,6 +123,31 @@ export class ModelModel {
         }
     }
 
+    static async getFavorites(userId: string) {
+        try {
+            const models = (
+                await db.execute({
+                    sql: 'SELECT m.* FROM models m JOIN favorites f ON m.id = f.model_id WHERE f.user_id = ?',
+                    args: [userId],
+                })
+            ).rows
+
+            if (!models)
+                return {
+                    successfully: true,
+                    message: 'Models not found for this user id',
+                }
+
+            return {
+                successfully: true,
+                message: 'Models found',
+                data: models,
+            }
+        } catch (error: any) {
+            return { successfully: false, message: error.message }
+        }
+    }
+
     static async create(newModel: IModel) {
         try {
             const {

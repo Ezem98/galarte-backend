@@ -5,4 +5,4 @@ export const favoritesRouter = Router()
 
 favoritesRouter.post('/', FavoriteController.create)
 
-favoritesRouter.delete('/:id', FavoriteController.delete)
+favoritesRouter.delete('/:userId/:modelId', FavoriteController.delete)

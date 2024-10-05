@@ -55,6 +55,18 @@ export class ModelController {
         return res.json({ successfully, message, data })
     }
 
+    static async getFavorites(req: Request, res: Response) {
+        const { userId } = req.params
+
+        const { successfully, message, data } = await ModelModel.getFavorites(
+            userId
+        )
+
+        if (!successfully)
+            return res.status(400).send({ successfully, message })
+        return res.json({ successfully, message, data })
+    }
+
     static async create(req: Request, res: Response) {
         const { body, files } = req
         if (!files || Object.keys(files).length === 0)

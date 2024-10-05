@@ -75,7 +75,12 @@ Content-Type: application/json
 ###
 
 # DELETE FAV
-DELETE  http://localhost:1234/favorites/1 HTTP/1.1
+DELETE  http://localhost:1234/favorites/13/1 HTTP/1.1
+
+###
+
+# GET FAV
+GET  http://localhost:1234/models/favorite/13 HTTP/1.1
 
 ###
 

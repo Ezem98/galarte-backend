@@ -49,11 +49,11 @@ export class FavoriteModel {
         }
     }
 
-    static async delete(id: string) {
+    static async delete(userId: string, modelId: string) {
         try {
             await db.execute({
-                sql: 'DELETE FROM favorites WHERE id = ?',
-                args: [id],
+                sql: 'DELETE FROM favorites WHERE user_id = ? AND model_id = ?',
+                args: [userId, modelId],
             })
 
             return { successfully: true, message: 'Favorite deleted' }

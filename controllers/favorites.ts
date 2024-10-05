@@ -23,9 +23,12 @@ export class FavoriteController {
     }
 
     static async delete(req: Request, res: Response) {
-        const { id } = req.params
+        const { userId, modelId } = req.params
 
-        const { successfully, message } = await FavoriteModel.delete(id)
+        const { successfully, message } = await FavoriteModel.delete(
+            userId,
+            modelId
+        )
         if (!successfully) return res.status(400).send({ message })
         return res.send({ message })
     }

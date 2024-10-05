@@ -13,6 +13,8 @@ modelsRouter.get('/search/:search', ModelController.getByName)
 
 modelsRouter.get('/user/:userId', ModelController.getByUserId)
 
+modelsRouter.get('/favorite/:userId', ModelController.getFavorites)
+
 modelsRouter.post('/', ModelController.create)
 
 modelsRouter.patch('/:id', ModelController.update)
