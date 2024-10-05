@@ -1,4 +1,5 @@
 import OpenAI from 'openai'
+import { Categories } from '../enums/categories.ts'
 import { IDBResponse } from '../types/dbResponse.ts'
 import { IOpenAI } from '../types/openAI.ts'
 import { EXPERIENCE_LEVEL } from '../utils/consts.ts'
@@ -13,15 +14,16 @@ export class OpenAIModel {
     static async generateStepsWithOpenAI(
         openAIProps: IOpenAI
     ): Promise<IDBResponse> {
-        const { modelName, modelSize, experienceLevel } = openAIProps
+        const { modelCategory, modelName, modelSize, experienceLevel } =
+            openAIProps
 
         const thread = await this.openai.beta.threads.create()
 
         await this.openai.beta.threads.messages.create(thread.id, {
             role: 'assistant',
-            content: `Como especialista en construcción, necesito que escribas una lista paso a paso en formato json con un título y una breve explicación sobre como construir/colocar ${modelName} de ${
-                modelSize.width / 100
-            } metro/s de largo y ${
+            content: `Como especialista en construcción, necesito que escribas una lista paso a paso en formato json con un título y una breve explicación sobre como ${
+                modelCategory == Categories.Opening ? 'colocar' : 'construir'
+            } ${modelName} de ${modelSize.width / 100} metro/s de largo y ${
                 modelSize.height / 100
             } metro/s de alto para una persona con ${
                 EXPERIENCE_LEVEL[experienceLevel]
