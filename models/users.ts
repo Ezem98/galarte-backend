@@ -51,7 +51,6 @@ export class UserModel {
 
     static async create(newUser: Omit<IUser, 'password_salt'>) {
         try {
-            console.log({ newUser })
             const {
                 name,
                 surname,
