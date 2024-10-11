@@ -15,6 +15,9 @@ export const modelSchema = z.object({
         .int()
         .min(Categories.Roof, 'Category ID must be at least 1')
         .max(Categories.Foundation, 'Category ID must be at most 5'),
+    width: z.number().positive(),
+    height: z.number().positive(),
+    position: z.enum(['horizontal', 'vertical']),
 })
 
 export const validModelData = (modelData: IModel) => {

@@ -157,6 +157,9 @@ export class ModelModel {
                 difficulty_rating,
                 image,
                 category_id,
+                height,
+                width,
+                position,
             } = newModel
 
             // const modelDataUrl = await CloudinaryModel.uploadImage(
@@ -182,6 +185,9 @@ export class ModelModel {
                                 model_image TEXT NOT NULL,
                                 difficulty_rating INTEGER NOT NULL,
                                 category_id INTEGER NOT NULL,
+                                height REAL NOT NULL,
+                                width REAL NOT NULL,
+                                position TEXT NOT NULL,
                                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                                 FOREIGN KEY (category_id) REFERENCES categories(id)
@@ -189,8 +195,8 @@ export class ModelModel {
                         `,
                     {
                         sql: `
-                            INSERT INTO models (name, description, model_data, model_image, difficulty_rating, category_id) VALUES
-                            (?, ?, ?, ?, ?, ?);
+                            INSERT INTO models (name, description, model_data, model_image, difficulty_rating, category_id, height, width, position) VALUES
+                            (?, ?, ?, ?, ?, ?, ?, ?, ?);
                         `,
                         args: [
                             name,
@@ -199,6 +205,9 @@ export class ModelModel {
                             imageUrl,
                             difficulty_rating ?? null,
                             category_id,
+                            height,
+                            width,
+                            position,
                         ],
                     },
                 ],
