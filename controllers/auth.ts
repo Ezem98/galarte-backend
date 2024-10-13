@@ -21,8 +21,6 @@ export class AuthController {
     }
 
     static async google(req: Request, res: Response) {
-        console.log({ body: req.user as GoogleUser })
-
         const user = req.user as GoogleUser
 
         const newUser: IUser = {
@@ -33,6 +31,7 @@ export class AuthController {
             password: '',
             password_salt: '',
             experience_level: ExperienceLevel.BEGINNER,
+            completed_profile: 0,
         }
 
         const { successfully, message, data } = await UserModel.create(newUser)

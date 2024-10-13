@@ -27,7 +27,13 @@ PATCH  http://localhost:1234/users/ezem98 HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "ezem98@test.com"
+    "username": "ezem98",
+    "email": "ezem98@example.net",
+    "password": "",
+    "newPassword": "",
+    "experience_level": 1,
+    "image": "",
+    "completed_profile": 0
 }
 
 ###

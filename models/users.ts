@@ -1,7 +1,7 @@
 import { CloudinaryModel } from '../models/cloudinary.ts'
-import { IUser } from '../types/user.ts'
+import { IUpdateUser, IUser } from '../types/user.ts'
 import { db } from '../utils/consts.ts'
-import { generatePassword } from '../utils/functions.ts'
+import { generatePassword, validPassword } from '../utils/functions.ts'
 
 export class UserModel {
     static async getAll() {
@@ -59,6 +59,7 @@ export class UserModel {
                 password,
                 experience_level,
                 image,
+                completed_profile,
             } = newUser
 
             const { hash, salt } = generatePassword(password)
@@ -85,14 +86,15 @@ export class UserModel {
                                 password_salt TEXT NOT NULL,
                                 image TEXT,
                                 experience_level INTEGER,
+                                completed_profile INTEGER DEFAULT 0,
                                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                             );
                         `,
                     {
                         sql: `
-                            INSERT INTO users (name, surname, username, email, password, password_salt, image, experience_level) VALUES
-                            (?, ?, ?, ?, ?, ?, ?, ?);
+                            INSERT INTO users (name, surname, username, email, password, password_salt, image, experience_level, completed_profile) VALUES
+                            (?, ?, ?, ?, ?, ?, ?, ?, ?);
                         `,
                         args: [
                             name,
@@ -103,6 +105,7 @@ export class UserModel {
                             salt,
                             imageUrl ?? null,
                             experience_level,
+                            completed_profile,
                         ],
                     },
                 ],
@@ -127,19 +130,43 @@ export class UserModel {
         }
     }
 
-    static async update(currentUserName: string, partialUser: Partial<IUser>) {
-        const { username, email, password, image, experience_level } =
-            partialUser
+    static async update(
+        currentUserName: string,
+        partialUser: Partial<IUpdateUser>
+    ) {
+        const {
+            username,
+            email,
+            password,
+            newPassword,
+            image,
+            experience_level,
+            completed_profile,
+        } = partialUser
 
         let hash: string | undefined,
             salt: string | undefined,
             imageUrl: string | undefined
 
         try {
-            if (password) {
-                const result = generatePassword(password)
-                hash = result.hash
-                salt = result.salt
+            const { data: currentUser } = await this.getByUsername(
+                currentUserName
+            )
+
+            if (!currentUser)
+                return { successfully: false, message: 'User not found' }
+
+            if (password && newPassword) {
+                const valid = validPassword(
+                    password,
+                    currentUser.password as string,
+                    currentUser.password_salt as string
+                )
+                if (valid) {
+                    const result = generatePassword(newPassword)
+                    hash = result.hash
+                    salt = result.salt
+                }
             }
 
             if (image)
@@ -148,13 +175,6 @@ export class UserModel {
                     `${username}-profile-image`,
                     'usersImages'
                 )
-
-            const { data: currentUser } = await this.getByUsername(
-                currentUserName
-            )
-
-            if (!currentUser)
-                return { successfully: false, message: 'User not found' }
 
             await db.batch(
                 [
@@ -165,7 +185,8 @@ export class UserModel {
                             password = ?,
                             password_salt = ?,
                             image = ?,
-                            experience_level = ?
+                            experience_level = ?,
+                            completed_profile = ?
                         WHERE
                             username = ?;`,
                         args: [
@@ -175,6 +196,7 @@ export class UserModel {
                             salt ?? currentUser.password_salt,
                             imageUrl ?? currentUser.image,
                             experience_level ?? currentUser.experience_level,
+                            completed_profile ?? currentUser.completed_profile,
                             currentUserName,
                         ],
                     },

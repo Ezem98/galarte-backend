@@ -5,7 +5,7 @@ import { guideSchema } from './guide.ts'
 export const userModelSchema = z.object({
     userId: z.number().positive(),
     modelId: z.number().positive(),
-    completed: z.boolean().default(false),
+    completed: z.number().int().min(0).max(1).default(0),
     currentStep: z.number().positive().default(1),
     guide: guideSchema,
 })

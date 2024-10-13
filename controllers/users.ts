@@ -1,6 +1,10 @@
 import { Request, Response } from 'express'
 import { UserModel } from '../models/users.ts'
-import { validPartialUserData, validUserData } from '../schemas/users.ts'
+import {
+    validPartialUserData,
+    validUpdatePasswordData,
+    validUserData,
+} from '../schemas/users.ts'
 
 export class UserController {
     static async getAll(req: Request, res: Response) {
@@ -46,7 +50,18 @@ export class UserController {
 
     static async update(req: Request, res: Response) {
         const { body } = req
+
         const { username: currentUserName } = req.params
+
+        if (body.newPassword) {
+            const passwordValidationResult = validUpdatePasswordData(body)
+
+            if (passwordValidationResult.error)
+                return res.status(400).json({
+                    error: JSON.parse(passwordValidationResult.error.message),
+                })
+        }
+
         const validationResult = validPartialUserData(body)
 
         if (validationResult.error)

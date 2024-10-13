@@ -10,6 +10,13 @@ export interface IUser {
     password_salt: string
     experience_level: ExperienceLevel
     image?: string
+    completed_profile: number
     created_at?: string
     updated_at?: string
+}
+
+export interface IUpdateUser
+    extends Omit<IUser, 'id' | 'name' | 'surname' | 'password'> {
+    password?: string
+    newPassword?: string
 }
