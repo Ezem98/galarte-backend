@@ -1,4 +1,4 @@
-import { createClient } from '@libsql/Client'
+import { createClient } from '@libsql/client/web'
 import { ExperienceLevel } from '../enums/experienceLevel.ts'
 
 export const EXPERIENCE_LEVEL: Record<ExperienceLevel, string> = {
