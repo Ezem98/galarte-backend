@@ -56,4 +56,35 @@ export class OpenAIModel {
             }
         }
     }
+
+    static async responseMessage(message: string): Promise<IDBResponse> {
+        const completion = await this.openai.chat.completions.create({
+            model: 'gpt-4o-mini',
+            messages: [
+                {
+                    role: 'system',
+                    content:
+                        'You are a helpful profesional building assistant.',
+                },
+                {
+                    role: 'user',
+                    content: message,
+                },
+            ],
+        })
+
+        if (completion.created) {
+            const choice = completion.choices[0]
+
+            return {
+                successfully: true,
+                message: 'Message generated',
+                data: choice.message.content,
+            }
+        } else
+            return {
+                successfully: false,
+                message: 'Failed to generate message',
+            }
+    }
 }

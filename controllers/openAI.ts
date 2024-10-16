@@ -19,4 +19,19 @@ export class OpenAIController {
 
         return res.json({ message, successfully, data })
     }
+
+    static async responseMessage(req: Request, res: Response) {
+        console.log('llego')
+
+        const { body } = req
+
+        console.log(body.message)
+
+        const { successfully, message, data } =
+            await OpenAIModel.responseMessage(body.message)
+
+        if (!successfully) return res.status(400).send({ message })
+
+        return res.json({ message, successfully, data })
+    }
 }

@@ -3,6 +3,7 @@ import { ExperienceLevel } from '../enums/experienceLevel.ts'
 import { IOpenAI } from '../types/openAI.ts'
 
 export const openAISchema = z.object({
+    modelCategory: z.number().int().positive(), //cambiar por el id quizás
     modelName: z.string(), //cambiar por el id quizás
     modelSize: z.object({
         height: z.number().int().positive(),
