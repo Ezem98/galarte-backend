@@ -1,5 +1,5 @@
 export interface IMaterial {
     material: string
-    cantidad: number
+    cantidad: string
     finalidad: string
 }
