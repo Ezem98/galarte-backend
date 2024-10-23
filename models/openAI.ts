@@ -27,7 +27,7 @@ export class OpenAIModel {
                 modelSize.height / 100
             } metro/s de alto para una persona con ${
                 EXPERIENCE_LEVEL[experienceLevel]
-            }, toda terminología necesaria para explicar cada paso, no solo la menciones también explica el concepto. En cuanto al lenguaje, necesito que utilices palabras que sean de uso común en argentina y solo quiero el json, con las claves: "titulo", "explicacion", "pasos" y dentro de pasos la lista de pasos con este formato: "paso", "titulo", "descripcion". Ademas no quiero me envies ningún texto de más.`,
+            }, toda terminología necesaria para explicar cada paso, no solo la menciones también explica el concepto. En cuanto al lenguaje, necesito que utilices palabras que sean de uso común en argentina y solo quiero el json, con las claves: "titulo", "explicacion", "pasos" y dentro de pasos la lista de pasos con este formato: "paso", "titulo", "descripcion". Además agrega la clave "materiales" y dentro de ella iría la lista de materiales con este formato: "material", "cantidad", "finalidad". También una clave "tiempo_insumido" expresada en minutos que va a ser un entero que representa el tiempo aproximado que le llevará a la persona realizar la obra en base a su experiencia. Por último una clave "costo" que sería el costo aproximado promedio de realizar la obra expresado en dolares. Asimismo no quiero me envies ningún texto de más. Revisa bien la estructura del JSON.`,
         })
 
         const run = await this.openai.beta.threads.runs.createAndPoll(

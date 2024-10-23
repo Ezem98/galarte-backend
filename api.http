@@ -49,6 +49,7 @@ Content-Type: application/json
 
 {
   "modelName": "Puerta de Entrada Clásica de Madera Roja",
+  "modelCategory": 4,
   "modelSize": {
     "width": 100,
     "height": 200
