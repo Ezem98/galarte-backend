@@ -34,9 +34,10 @@ export class UserController {
         const validationResult = validUserData(body)
 
         if (validationResult.error)
-            return res
-                .status(400)
-                .json({ error: JSON.parse(validationResult.error.message) })
+            return res.status(400).json({
+                successfully: false,
+                message: 'Revisar los datos ingresados',
+            })
 
         const { successfully, message, data } = await UserModel.create(
             validationResult.data
@@ -77,7 +78,7 @@ export class UserController {
 
         if (!successfully) return res.status(400).send({ message })
 
-        return res.status(201).json({ message, user })
+        return res.status(201).json({ successfully, message, user })
     }
 
     static async delete(req: Request, res: Response) {

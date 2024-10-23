@@ -28,7 +28,7 @@ export const updateUserSchema = z.object({
     experience_level: z
         .number()
         .int()
-        .min(ExperienceLevel.BEGINNER, 'Experience level must be at least 1')
+        .positive()
         .max(ExperienceLevel.ADVANCED, 'Experience level must be at most 3'),
     completed_profile: z.number().int().min(0).max(1),
 })

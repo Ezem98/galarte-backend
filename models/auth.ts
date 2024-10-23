@@ -9,7 +9,7 @@ export class AuthModel {
             if (!user)
                 return {
                     successfully: false,
-                    message: 'User not found',
+                    message: 'Usuario no encontrado',
                 }
 
             const valid = validPassword(
@@ -21,13 +21,14 @@ export class AuthModel {
             if (valid)
                 return {
                     successfully: true,
-                    message: 'User logged in',
+                    message: 'Usuario logueado correctamente',
                     data: user,
                 }
 
             return {
                 successfully: false,
-                message: 'Failed to logged in. Wrong username or password',
+                message:
+                    'Fallo en la autenticación. Usuario y/o contraseña incorrectos',
             }
         } catch (error: any) {
             return { successfully: false, message: error.message }
