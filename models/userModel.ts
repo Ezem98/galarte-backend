@@ -163,18 +163,14 @@ export class UserModelModel {
         }
     }
 
-    static async update(
-        userId: number,
-        modelId: number,
-        partialUserModel: Partial<IUserModel>
-    ) {
+    static async update(id: number, partialUserModel: Partial<IUserModel>) {
         const { completed, current_step } = partialUserModel
 
         try {
             const currentUserModel = (
                 await db.execute({
-                    sql: 'SELECT * FROM user_models WHERE user_id = ? AND model_id = ?',
-                    args: [userId, modelId],
+                    sql: 'SELECT * FROM user_models WHERE id = ?',
+                    args: [id],
                 })
             ).rows[0]
 
@@ -185,11 +181,11 @@ export class UserModelModel {
                         SET completed = ?,
                             current_step = ?
                         WHERE
-                            user_id = ?;`,
+                            id = ?;`,
                         args: [
                             completed ?? currentUserModel.completed,
                             current_step ?? currentUserModel.current_step,
-                            userId,
+                            id,
                         ],
                     },
                 ],
@@ -198,8 +194,8 @@ export class UserModelModel {
 
             const updatedUserModel = (
                 await db.execute({
-                    sql: 'SELECT * FROM user_models WHERE user_id = ? AND model_id = ?',
-                    args: [userId, modelId],
+                    sql: 'SELECT * FROM user_models WHERE id = ?',
+                    args: [id],
                 })
             ).rows[0]
 

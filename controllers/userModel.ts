@@ -65,7 +65,7 @@ export class UserModelController {
     static async update(req: Request, res: Response) {
         const { body } = req
 
-        const { userId, modelId } = req.params
+        const { id } = req.params
 
         const validationResult = validPartialUserModelData(body)
 
@@ -75,8 +75,7 @@ export class UserModelController {
                 .json({ error: JSON.parse(validationResult.error.message) })
 
         const { successfully, message, data } = await UserModelModel.update(
-            +userId,
-            +modelId,
+            +id,
             validationResult.data
         )
 

@@ -9,6 +9,6 @@ userModelsRouter.get('/:userId/:modelId', UserModelController.get)
 
 userModelsRouter.post('/', UserModelController.create)
 
-userModelsRouter.patch('/:userId/:modelId', UserModelController.update)
+userModelsRouter.patch('/:id', UserModelController.update)
 
 userModelsRouter.delete('/:userId/:modelId', UserModelController.delete)
