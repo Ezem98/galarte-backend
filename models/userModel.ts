@@ -108,7 +108,7 @@ export class UserModelModel {
 
     static async create(newUserModel: IUserModel) {
         try {
-            const { userId, modelId, completed, currentStep, guide } =
+            const { user_id, model_id, completed, current_step, guide } =
                 newUserModel
 
             await db.batch(
@@ -134,10 +134,10 @@ export class UserModelModel {
                             (?, ?, ?, ?, ?);
                         `,
                         args: [
-                            userId,
-                            modelId,
+                            user_id,
+                            model_id,
                             completed,
-                            currentStep,
+                            current_step,
                             JSON.stringify(guide),
                         ],
                     },
@@ -149,7 +149,7 @@ export class UserModelModel {
             const userModel = (
                 await db.execute({
                     sql: 'SELECT * FROM user_models WHERE user_id = ? AND model_id = ?',
-                    args: [userId, modelId],
+                    args: [user_id, model_id],
                 })
             ).rows[0]
 
@@ -168,7 +168,7 @@ export class UserModelModel {
         modelId: number,
         partialUserModel: Partial<IUserModel>
     ) {
-        const { completed, currentStep } = partialUserModel
+        const { completed, current_step } = partialUserModel
 
         try {
             const currentUserModel = (
@@ -188,7 +188,7 @@ export class UserModelModel {
                             user_id = ?;`,
                         args: [
                             completed ?? currentUserModel.completed,
-                            currentStep ?? currentUserModel.currentStep,
+                            current_step ?? currentUserModel.current_step,
                             userId,
                         ],
                     },

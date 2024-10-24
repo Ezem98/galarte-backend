@@ -3,10 +3,10 @@ import { IUserModel } from '../types/userModel.ts'
 import { guideSchema } from './guide.ts'
 
 export const userModelSchema = z.object({
-    userId: z.number().positive(),
-    modelId: z.number().positive(),
+    user_id: z.number().positive(),
+    model_id: z.number().positive(),
     completed: z.number().int().min(0).max(1).default(0),
-    currentStep: z.number().positive().default(1),
+    current_step: z.number().positive().default(1),
     guide: guideSchema,
 })
 
