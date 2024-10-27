@@ -77,6 +77,8 @@ export class ModelController {
         const validationResult = validModelData({
             ...body,
             data: '',
+            width: +body.width,
+            height: +body.height,
             image: imageToUpload.tempFilePath,
             category_id: +body.categoryId,
             difficulty_rating: +body.difficultyRating,
