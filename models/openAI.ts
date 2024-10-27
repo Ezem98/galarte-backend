@@ -22,7 +22,7 @@ export class OpenAIModel {
         await this.openai.beta.threads.messages.create(thread.id, {
             role: 'assistant',
             content: `Como especialista en construcción, necesito que escribas una lista paso a paso en formato json con un título y una breve explicación sobre como ${
-                modelCategory == Categories.Opening ? 'colocar' : 'construir'
+                modelCategory == Categories.Opening || modelCategory == Categories.Floor ? 'colocar' : 'construir'
             } ${modelName} de ${modelSize.width / 100} metro/s de largo y ${
                 modelSize.height / 100
             } metro/s de alto para una persona con ${
