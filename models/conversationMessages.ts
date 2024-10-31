@@ -16,7 +16,6 @@ export class ConversationMessageModel {
                                 sender TEXT NOT NULL,
                                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                                UNIQUE(id, conversation_id),
                                 FOREIGN KEY (conversation_id) REFERENCES conversations(id)
                             );
                         `,
@@ -34,8 +33,8 @@ export class ConversationMessageModel {
 
             const conversationMessage = (
                 await db.execute({
-                    sql: 'SELECT * FROM conversation_message WHERE conversation_id = ? AND message = ? AND sender = ?',
-                    args: [conversation_id, message, sender],
+                    sql: 'SELECT * FROM conversation_messages WHERE conversation_id = ? ORDER BY id DESC LIMIT 1',
+                    args: [conversation_id],
                 })
             ).rows[0]
 
@@ -81,7 +80,7 @@ export class ConversationMessageModel {
         try {
             const conversationMessages = (
                 await db.execute({
-                    sql: `SELECT * FROM conversation_message WHERE conversation_id = ?`,
+                    sql: `SELECT * FROM conversation_messages WHERE conversation_id = ? ORDER BY created_at ASC`,
                     args: [conversationId],
                 })
             ).rows

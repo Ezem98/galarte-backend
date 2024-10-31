@@ -4,10 +4,11 @@ import { ConversationMessageController } from '../controllers/conversationMessag
 export const conversationMessageRouter = Router()
 
 conversationMessageRouter.post('/', ConversationMessageController.create)
+conversationMessageRouter.post('/all', ConversationMessageController.createAll)
 
 conversationMessageRouter.get('/:id', ConversationMessageController.get)
 conversationMessageRouter.get(
-    '/:conversationId',
+    '/conversation/:conversationId',
     ConversationMessageController.getAllByConversationId
 )
 

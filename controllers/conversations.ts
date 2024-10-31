@@ -5,6 +5,7 @@ import { validConversationData } from '../schemas/conversation.ts'
 export class ConversationController {
     static async create(req: Request, res: Response) {
         const { body } = req
+
         const validationResult = validConversationData(body)
 
         if (validationResult.error)
@@ -30,7 +31,7 @@ export class ConversationController {
         return res.status(201).json({ successfully, message, data })
     }
 
-    static async getByUserId(req: Request, res: Response) {
+    static async getAllByUserId(req: Request, res: Response) {
         const { userId } = req.params
 
         const { successfully, message, data } =

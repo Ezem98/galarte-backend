@@ -48,10 +48,10 @@ app.use('/auth', authRouter)
 app.use('/favorites', favoritesRouter)
 
 //region Rutas de conversaciones
-app.use('/favorites', conversationRouter)
+app.use('/conversation', conversationRouter)
 
 //region Rutas de mesnajes de conversaciones
-app.use('/favorites', conversationMessageRouter)
+app.use('/conversationMessage', conversationMessageRouter)
 
 //agregar un middleware para validar la sesión del usuario
 

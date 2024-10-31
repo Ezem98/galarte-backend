@@ -32,7 +32,7 @@ export class ConversationModel {
 
             const conversation = (
                 await db.execute({
-                    sql: 'SELECT * FROM conversations WHERE user_id = ?',
+                    sql: 'SELECT * FROM conversations WHERE user_id = ? ORDER BY id DESC LIMIT 1',
                     args: [user_id],
                 })
             ).rows[0]
@@ -88,6 +88,7 @@ export class ConversationModel {
                 return {
                     successfully: true,
                     message: 'Conversations not found',
+                    data: [],
                 }
 
             return {
