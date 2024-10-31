@@ -2,6 +2,8 @@ import cors from 'cors'
 import express from 'express'
 import fileUpload from 'express-fileupload'
 import { authRouter } from './routes/auth.ts'
+import { conversationMessageRouter } from './routes/conversationMessages.ts'
+import { conversationRouter } from './routes/conversations.ts'
 import { favoritesRouter } from './routes/favorites.ts'
 import { modelsRouter } from './routes/models.ts'
 import { openAIRouter } from './routes/openAI.ts'
@@ -44,6 +46,12 @@ app.use('/auth', authRouter)
 
 //region Rutas de favoritos
 app.use('/favorites', favoritesRouter)
+
+//region Rutas de conversaciones
+app.use('/favorites', conversationRouter)
+
+//region Rutas de mesnajes de conversaciones
+app.use('/favorites', conversationMessageRouter)
 
 //agregar un middleware para validar la sesión del usuario
 
