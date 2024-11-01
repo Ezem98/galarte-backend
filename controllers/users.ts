@@ -5,6 +5,7 @@ import {
     validUpdatePasswordData,
     validUserData,
 } from '../schemas/users.ts'
+import { debug } from 'console'
 
 export class UserController {
     static async getAll(req: Request, res: Response) {
@@ -30,9 +31,7 @@ export class UserController {
 
     static async create(req: Request, res: Response) {
         const { body } = req
-
         const validationResult = validUserData(body)
-
         if (validationResult.error)
             return res.status(400).json({
                 successfully: false,
