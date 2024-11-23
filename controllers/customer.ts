@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { UserModel } from '../models/users.ts'
+import { CustomerModel } from '../models/customer.ts'
 import {
     validPartialUserData,
     validUpdatePasswordData,
@@ -7,9 +7,13 @@ import {
 } from '../schemas/users.ts'
 import { debug } from 'console'
 
-export class UserController {
+export class CustomerController {
     static async getAll(req: Request, res: Response) {
-        const { successfully, message, data: users } = await UserModel.getAll()
+        const {
+            successfully,
+            message,
+            data: users,
+        } = await CustomerModel.getAll()
 
         if (!successfully) return res.status(400).send({ message })
 
@@ -23,10 +27,19 @@ export class UserController {
             successfully,
             message,
             data: user,
-        } = await UserModel.getByUsername(username)
+        } = await CustomerModel.getByUsername(username)
 
         if (!successfully) return res.status(400).send({ message })
         return res.json({ message, user })
+    }
+
+    static async getById(req: Request, res: Response) {
+        const { id } = req.params
+
+        const { successfully, message, data } = await CustomerModel.getById(+id)
+
+        if (!successfully) return res.status(400).send({ message })
+        return res.json({ successfully, message, data })
     }
 
     static async create(req: Request, res: Response) {
@@ -38,7 +51,7 @@ export class UserController {
                 message: 'Revisar los datos ingresados',
             })
 
-        const { successfully, message, data } = await UserModel.create(
+        const { successfully, message, data } = await CustomerModel.create(
             validationResult.data
         )
 
@@ -73,7 +86,7 @@ export class UserController {
             successfully,
             message,
             data: user,
-        } = await UserModel.update(currentUserName, validationResult.data)
+        } = await CustomerModel.update(currentUserName, validationResult.data)
 
         if (!successfully) return res.status(400).send({ message })
 
@@ -83,7 +96,7 @@ export class UserController {
     static async delete(req: Request, res: Response) {
         const { username } = req.params
 
-        const { successfully, message } = await UserModel.delete(username)
+        const { successfully, message } = await CustomerModel.delete(username)
         if (!successfully) return res.status(400).send({ message })
         return res.send({ message })
     }

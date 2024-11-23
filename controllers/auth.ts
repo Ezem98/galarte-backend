@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { ExperienceLevel } from '../enums/experienceLevel.ts'
 import { AuthModel } from '../models/auth.ts'
-import { UserModel } from '../models/users.ts'
+import { CustomerModel } from '../models/customer.ts'
 import { GoogleUser } from '../types/googleUser.ts'
-import { IUser } from '../types/user.ts'
+import { IUser } from '../types/customer.ts'
 
 export class AuthController {
     static async login(req: Request, res: Response) {
@@ -34,7 +34,9 @@ export class AuthController {
             completed_profile: 0,
         }
 
-        const { successfully, message, data } = await UserModel.create(newUser)
+        const { successfully, message, data } = await CustomerModel.create(
+            newUser
+        )
 
         if (!successfully)
             return res.status(400).send({ successfully, message })

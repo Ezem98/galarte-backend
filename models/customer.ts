@@ -1,9 +1,9 @@
-import { CloudinaryModel } from '../models/cloudinary.ts'
-import { IUpdateUser, IUser } from '../types/user.ts'
+import { CloudinaryModel } from './cloudinary.ts'
+import { IUpdateUser, IUser } from '../types/customer.ts'
 import { db } from '../utils/consts.ts'
 import { generatePassword, validPassword } from '../utils/functions.ts'
 
-export class UserModel {
+export class CustomerModel {
     static async getAll() {
         try {
             const users = (await db.execute('SELECT * FROM users')).rows
@@ -43,6 +43,31 @@ export class UserModel {
                 successfully: true,
                 message: 'User found',
                 data: user,
+            }
+        } catch (error: any) {
+            return { successfully: false, message: error.message }
+        }
+    }
+
+    static async getById(id: number) {
+        try {
+            const artwork = (
+                await db.execute({
+                    sql: 'SELECT * FROM artworks WHERE id = ?',
+                    args: [id],
+                })
+            ).rows[0]
+
+            if (!artwork)
+                return {
+                    successfully: false,
+                    message: 'Artwork not found',
+                }
+
+            return {
+                successfully: true,
+                message: 'Artwork found',
+                data: artwork,
             }
         } catch (error: any) {
             return { successfully: false, message: error.message }

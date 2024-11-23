@@ -1,10 +1,10 @@
-import { UserModel } from '../models/users.ts'
+import { CustomerModel } from './customer.ts'
 import { validPassword } from '../utils/functions.ts'
 
 export class AuthModel {
     static async login(username: string, password: string) {
         try {
-            const { data: user } = await UserModel.getByUsername(username)
+            const { data: user } = await CustomerModel.getByUsername(username)
 
             if (!user)
                 return {

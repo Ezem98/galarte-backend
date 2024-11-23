@@ -1,27 +1,11 @@
 import { Request, Response } from 'express'
-import { UserModelModel } from '../models/userModel.ts'
-import {
-    validPartialUserModelData,
-    validUserModelData,
-} from '../schemas/userModel.ts'
+import { ArtistModel } from '../models/artist.ts'
+import { validArtistData, validPartialArtistData } from '../schemas/artist.ts'
+import { UploadedFile } from 'express-fileupload'
 
-export class UserModelController {
-    static async getAllByUserId(req: Request, res: Response) {
-        const { userId } = req.params
-
-        const { successfully, message, data } =
-            await UserModelModel.getAllByUserId(+userId)
-
-        if (!successfully) return res.status(400).send({ message })
-
-        res.json({ successfully, message, data })
-    }
-
-    static async getAllByModelId(req: Request, res: Response) {
-        const { modelId } = req.params
-
-        const { successfully, message, data } =
-            await UserModelModel.getAllByModelId(+modelId)
+export class ArtistController {
+    static async getAll(req: Request, res: Response) {
+        const { successfully, message, data } = await ArtistModel.getAll()
 
         if (!successfully) return res.status(400).send({ message })
 
@@ -29,23 +13,25 @@ export class UserModelController {
     }
 
     static async get(req: Request, res: Response) {
-        const { userId, modelId } = req.params
+        const { id } = req.params
 
-        const { successfully, message, data } = await UserModelModel.get(
-            +userId,
-            +modelId
-        )
+        const { successfully, message, data } = await ArtistModel.get(+id)
 
         if (!successfully) return res.status(400).send({ message })
         return res.json({ successfully, message, data })
     }
 
     static async create(req: Request, res: Response) {
-        const { body } = req
+        const { body, files } = req
 
-        const validationResult = validUserModelData({
+        if (!files || Object.keys(files).length === 0)
+            return res.status(400).send('No se encontró ningún archivo')
+
+        const imageToUpload = files?.artworkImage as UploadedFile // Campo de archivo
+
+        const validationResult = validArtistData({
             ...body,
-            guide: body.guideObject,
+            image: imageToUpload.tempFilePath,
         })
 
         if (validationResult.error)
@@ -53,7 +39,7 @@ export class UserModelController {
                 .status(400)
                 .json({ error: JSON.parse(validationResult.error.message) })
 
-        const { successfully, message, data } = await UserModelModel.create(
+        const { successfully, message, data } = await ArtistModel.create(
             validationResult.data
         )
 
@@ -67,14 +53,14 @@ export class UserModelController {
 
         const { id } = req.params
 
-        const validationResult = validPartialUserModelData(body)
+        const validationResult = validPartialArtistData(body)
 
         if (validationResult.error)
             return res
                 .status(400)
                 .json({ error: JSON.parse(validationResult.error.message) })
 
-        const { successfully, message, data } = await UserModelModel.update(
+        const { successfully, message, data } = await ArtistModel.update(
             +id,
             validationResult.data
         )
@@ -85,12 +71,9 @@ export class UserModelController {
     }
 
     static async delete(req: Request, res: Response) {
-        const { userId, modelId } = req.params
+        const { id } = req.params
 
-        const { successfully, message } = await UserModelModel.delete(
-            +userId,
-            +modelId
-        )
+        const { successfully, message } = await ArtistModel.delete(+id)
         if (!successfully) return res.status(400).send({ message })
         return res.send({ successfully, message })
     }
