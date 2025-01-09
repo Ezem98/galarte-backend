@@ -3,7 +3,7 @@ export interface IArtist {
     name: string
     lastname: string
     address: string
-    description: string
+    biography: string
     dateOfBirth: string
     technique: string
     nationality: string

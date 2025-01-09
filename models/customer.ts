@@ -74,7 +74,7 @@ export class CustomerModel {
         }
     }
 
-    static async create(newUser: Omit<IUser, 'password_salt'>) {
+    static async create(newUser: any) {
         try {
             const {
                 name,

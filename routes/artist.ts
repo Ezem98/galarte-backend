@@ -3,11 +3,11 @@ import { ArtistController } from '../controllers/artist.ts'
 
 export const artistsRouter = Router()
 
-artistsRouter.get('/user/:userId', ArtistController.getAll)
-artistsRouter.get('/:userId/:modelId', ArtistController.get)
+artistsRouter.get('/', ArtistController.getAll)
+artistsRouter.get('/:id', ArtistController.get)
 
 artistsRouter.post('/', ArtistController.create)
 
 artistsRouter.patch('/:id', ArtistController.update)
 
-artistsRouter.delete('/:userId/:modelId', ArtistController.delete)
+artistsRouter.delete('/:id', ArtistController.delete)

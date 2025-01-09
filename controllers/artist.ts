@@ -27,7 +27,7 @@ export class ArtistController {
         if (!files || Object.keys(files).length === 0)
             return res.status(400).send('No se encontró ningún archivo')
 
-        const imageToUpload = files?.artworkImage as UploadedFile // Campo de archivo
+        const imageToUpload = files?.artistImage as UploadedFile // Campo de archivo
 
         const validationResult = validArtistData({
             ...body,

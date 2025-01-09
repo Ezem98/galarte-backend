@@ -74,7 +74,7 @@ export class ArtistModel {
                 name,
                 lastname,
                 address,
-                description,
+                biography,
                 dateOfBirth,
                 technique,
                 nationality,
@@ -85,8 +85,8 @@ export class ArtistModel {
 
             const imageUrl = await CloudinaryModel.uploadImage(
                 image,
-                `${name}-artist-image`,
-                'galarte/artists'
+                `${name.toLowerCase()}-${lastname.toLowerCase()}-artist-image`,
+                '/artists'
             )
 
             await db.batch(
@@ -97,7 +97,7 @@ export class ArtistModel {
                                 name TEXT NOT NULL,
                                 lastname TEXT NOT NULL,
                                 address TEXT NOT NULL,
-                                description TEXT NOT NULL,
+                                biography TEXT NOT NULL,
                                 dateOfBirth TEXT NOT NULL,
                                 technique TEXT NOT NULL,
                                 nationality TEXT NOT NULL,
@@ -105,19 +105,19 @@ export class ArtistModel {
                                 documentType TEXT NULL,
                                 document TEXT NULL,
                                 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                                updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                                updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
                             );
                         `,
                     {
                         sql: `
-                            INSERT INTO artists (name, lastname, address, description, dateOfBirth, technique, nationality, image, documentType, document) VALUES
+                            INSERT INTO artists (name, lastname, address, biography, dateOfBirth, technique, nationality, image, documentType, document) VALUES
                             (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
                         `,
                         args: [
                             name,
                             lastname,
                             address,
-                            description,
+                            biography,
                             dateOfBirth,
                             technique,
                             nationality,
@@ -150,7 +150,7 @@ export class ArtistModel {
     static async update(id: number, partialArtist: Partial<IArtist>) {
         const {
             address,
-            description,
+            biography: description,
             documentType,
             document,
             nationality,
@@ -172,7 +172,7 @@ export class ArtistModel {
                 imageUrl = await CloudinaryModel.uploadImage(
                     image,
                     `${currentArtist.name}-artist-image`,
-                    'galarte/artists'
+                    '/artists'
                 )
             }
 

@@ -11,7 +11,7 @@ export class CloudinaryModel {
         // Upload an image
         const uploadResult = await cloudinary.uploader
             .upload(imageUrl, {
-                folder: folderName,
+                folder: `/galarte/${folderName}`,
                 public_id: publicName,
             })
             .catch((error: any) => {

@@ -4,8 +4,7 @@ import {
     validPartialUserData,
     validUpdatePasswordData,
     validUserData,
-} from '../schemas/users.ts'
-import { debug } from 'console'
+} from '../schemas/customer.ts'
 
 export class CustomerController {
     static async getAll(req: Request, res: Response) {

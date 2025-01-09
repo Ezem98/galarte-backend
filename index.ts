@@ -1,10 +1,9 @@
 import cors from 'cors'
 import express from 'express'
 import fileUpload from 'express-fileupload'
-import { authRouter } from './routes/auth.ts'
 import { artistsRouter } from './routes/artist.ts'
 import { artworksRouter } from './routes/artwork.ts'
-import { favoritesRouter } from './routes/favorite.ts'
+import { customersRouter } from './routes/customer.ts'
 const port = process.env.PORT ?? 1234
 
 const app = express()
@@ -32,12 +31,6 @@ app.use('/artists', artistsRouter)
 
 //region Rutas de obras
 app.use('/artworks', artworksRouter)
-
-//region Rutas de auth
-app.use('/auth', authRouter)
-
-//region Rutas de favoritos
-app.use('/favorites', favoritesRouter)
 
 //agregar un middleware para validar la sesión del usuario
 

@@ -117,7 +117,7 @@ export class ArtworkModel {
             const imageUrl = await CloudinaryModel.uploadImage(
                 image,
                 `${name}-artwork-image`,
-                'galarte/artworks'
+                '/artworks'
             )
 
             await db.batch(
@@ -208,7 +208,7 @@ export class ArtworkModel {
                 imageUrl = await CloudinaryModel.uploadImage(
                     image,
                     `${name}-artwork-image`,
-                    'galarte/artworks'
+                    '/artworks'
                 )
 
             await db.batch(
