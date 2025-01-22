@@ -8,7 +8,10 @@ import {
 
 export class ArtworkController {
     static async getAll(req: Request, res: Response) {
-        const { successfully, message, data } = await ArtworkModel.getAll()
+        const { limit } = req.query
+        const { successfully, message, data } = await ArtworkModel.getAll(
+            Number(limit)
+        )
 
         if (!successfully) return res.status(400).send({ message })
 
@@ -26,9 +29,10 @@ export class ArtworkController {
 
     static async getByArtistId(req: Request, res: Response) {
         const { artistId } = req.params
+        const { limit } = req.query
 
         const { successfully, message, data } =
-            await ArtworkModel.getByArtistId(+artistId)
+            await ArtworkModel.getByArtistId(+artistId, Number(limit))
 
         if (!successfully) return res.status(400).send({ message })
         return res.json({ message, data })
@@ -57,9 +61,13 @@ export class ArtworkController {
             ...body,
             width: +body.width,
             height: +body.height,
+            length: +body.length,
             image: imageToUpload.tempFilePath,
+            framed: +body.framed,
             category_id: +body.categoryId,
             difficulty_rating: +body.difficultyRating,
+            artistId: +body.artistId,
+            price: +body.price,
         })
 
         if (validationResult.error)

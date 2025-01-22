@@ -3,9 +3,18 @@ import { db } from '../utils/consts.ts'
 import { CloudinaryModel } from './cloudinary.ts'
 
 export class ArtistModel {
-    static async getAll() {
+    static async getAll(limit?: number) {
         try {
-            const artists = (await db.execute('SELECT * FROM artists')).rows
+            let artists = []
+
+            if (limit)
+                artists = (
+                    await db.execute({
+                        sql: 'SELECT * FROM artists LIMIT ?',
+                        args: [limit],
+                    })
+                ).rows
+            else artists = (await db.execute('SELECT * FROM artists')).rows
 
             if (!artists.length)
                 return {

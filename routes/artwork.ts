@@ -7,7 +7,7 @@ artworksRouter.get('/', ArtworkController.getAll)
 
 artworksRouter.get('/:id', ArtworkController.getById)
 
-artworksRouter.get('/category/:categoryId', ArtworkController.getByArtistId)
+artworksRouter.get('/artist/:artistId', ArtworkController.getByArtistId)
 
 artworksRouter.get('/search/:search', ArtworkController.getByName)
 

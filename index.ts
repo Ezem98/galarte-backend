@@ -4,7 +4,7 @@ import fileUpload from 'express-fileupload'
 import { artistsRouter } from './routes/artist.ts'
 import { artworksRouter } from './routes/artwork.ts'
 import { customersRouter } from './routes/customer.ts'
-const port = process.env.PORT ?? 1234
+const port = process.env.PORT ?? 3000
 
 const app = express()
 app.disable('x-powered-by')

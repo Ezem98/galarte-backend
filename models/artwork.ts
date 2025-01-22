@@ -3,9 +3,17 @@ import { db } from '../utils/consts.ts'
 import { CloudinaryModel } from './cloudinary.ts'
 
 export class ArtworkModel {
-    static async getAll() {
+    static async getAll(limit?: number) {
         try {
-            const artworks = (await db.execute('SELECT * FROM artworks')).rows
+            let artworks = []
+            if (limit)
+                artworks = (
+                    await db.execute({
+                        sql: 'SELECT * FROM artworks LIMIT ?',
+                        args: [limit],
+                    })
+                ).rows
+            else artworks = (await db.execute('SELECT * FROM artworks')).rows
 
             if (!artworks.length)
                 return {
@@ -48,14 +56,23 @@ export class ArtworkModel {
         }
     }
 
-    static async getByArtistId(artistId: number) {
+    static async getByArtistId(artistId: number, limit?: number) {
         try {
-            const artworks = (
-                await db.execute({
-                    sql: 'SELECT * FROM artworks WHERE artistId = ?',
-                    args: [artistId],
-                })
-            ).rows
+            let artworks = []
+            if (limit)
+                artworks = (
+                    await db.execute({
+                        sql: 'SELECT * FROM artworks WHERE artistId = ? LIMIT ?',
+                        args: [artistId, limit],
+                    })
+                ).rows
+            else
+                artworks = (
+                    await db.execute({
+                        sql: 'SELECT * FROM artworks WHERE artistId = ?',
+                        args: [artistId],
+                    })
+                ).rows
 
             if (!artworks)
                 return {
@@ -107,11 +124,14 @@ export class ArtworkModel {
                 serialNumber,
                 width,
                 height,
+                length,
                 technique,
                 framed,
                 year,
                 image,
                 artistId,
+                price,
+                isUnique,
             } = newArtwork
 
             const imageUrl = await CloudinaryModel.uploadImage(
@@ -131,34 +151,40 @@ export class ArtworkModel {
                                 serialNumber TEXT NOT NULL,
                                 width INTEGER NOT NULL,
                                 height INTEGER NOT NULL,
-                                technique INTEGER NOT NULL,
+                                length INTEGER NOT NULL,
+                                technique TEXT NOT NULL,
                                 framed INTEGER NOT NULL,
                                 year TEXT NOT NULL,
                                 image TEXT NOT NULL,
                                 artistId INTEGER NOT NULL,
+                                price INTEGER NOT NULL,
+                                isUnique INTEGER NOT NULL,
                                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
                                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                                FOREIGN KEY (artistId) REFERENCES artists(id)
-                                UNIQUE(code, serialNumber, artistId),
+                                FOREIGN KEY (artistId) REFERENCES artists(id),
+                                UNIQUE(code, serialNumber, artistId)
                             );
                         `,
                     {
                         sql: `
-                            INSERT INTO artworks (name, description, code, serialNumber, width, height, technique, framed, year, image, artistId) VALUES
-                            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                            INSERT INTO artworks (name, description, code, serialNumber, width, height, length, technique, framed, year, image, artistId, price, isUnique) VALUES
+                            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
                         `,
                         args: [
                             name,
-                            description,
+                            description ?? '',
                             code,
                             serialNumber,
                             width,
                             height,
+                            length ?? 0,
                             technique,
                             framed,
                             year,
                             imageUrl,
                             artistId,
+                            price,
+                            isUnique,
                         ],
                     },
                 ],
@@ -188,6 +214,7 @@ export class ArtworkModel {
             description,
             width,
             height,
+            length,
             technique,
             year,
             framed,
@@ -219,6 +246,7 @@ export class ArtworkModel {
                             description = ?,
                             width = ?,
                             height = ?,
+                            length = ?,
                             technique = ?,
                             framed = ?,
                             year = ?,
@@ -230,6 +258,7 @@ export class ArtworkModel {
                             description ?? currentArtwork.description,
                             width ?? currentArtwork.data,
                             height ?? currentArtwork.difficultyRating,
+                            length ?? currentArtwork.length,
                             technique ?? currentArtwork.technique,
                             framed ?? currentArtwork.framed,
                             year ?? currentArtwork.year,

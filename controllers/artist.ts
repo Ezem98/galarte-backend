@@ -1,11 +1,15 @@
 import { Request, Response } from 'express'
+import { UploadedFile } from 'express-fileupload'
 import { ArtistModel } from '../models/artist.ts'
 import { validArtistData, validPartialArtistData } from '../schemas/artist.ts'
-import { UploadedFile } from 'express-fileupload'
 
 export class ArtistController {
     static async getAll(req: Request, res: Response) {
-        const { successfully, message, data } = await ArtistModel.getAll()
+        const { limit } = req.query
+
+        const { successfully, message, data } = await ArtistModel.getAll(
+            Number(limit)
+        )
 
         if (!successfully) return res.status(400).send({ message })
 
