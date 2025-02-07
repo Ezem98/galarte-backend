@@ -1,12 +1,22 @@
 import cors from 'cors'
 import express from 'express'
 import fileUpload from 'express-fileupload'
+import fs from 'fs'
+import https from 'https'
 import { artistsRouter } from './routes/artist.ts'
 import { artworksRouter } from './routes/artwork.ts'
 import { customersRouter } from './routes/customer.ts'
-const port = process.env.PORT ?? 3000
+
+const port = process.env.PORT ?? 443
 
 const app = express()
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/api.midominio.com/privkey.pem'),
+    cert: fs.readFileSync(
+        '/etc/letsencrypt/live/api.midominio.com/fullchain.pem'
+    ),
+}
+
 app.disable('x-powered-by')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -39,6 +49,10 @@ app.use((req, res) => {
     res.status(404).send('Página no encontrada')
 })
 
-app.listen(port, () => {
-    console.log(`Servidor corriendo en http://localhost:${port}`)
+https.createServer(options, app).listen(443, () => {
+    console.log('Servidor HTTPS corriendo en api.galartearte.com')
+})
+
+app.listen(80, () => {
+    console.log('Redireccionando HTTP a HTTPS...')
 })
