@@ -11,9 +11,11 @@ const port = process.env.PORT ?? 443
 
 const app = express()
 const options = {
-    key: fs.readFileSync('/etc/letsencrypt/live/api.midominio.com/privkey.pem'),
+    key: fs.readFileSync(
+        '/etc/letsencrypt/live/api.galartearte.com/privkey.pem'
+    ),
     cert: fs.readFileSync(
-        '/etc/letsencrypt/live/api.midominio.com/fullchain.pem'
+        '/etc/letsencrypt/live/api.galartearte.com/fullchain.pem'
     ),
 }
 
