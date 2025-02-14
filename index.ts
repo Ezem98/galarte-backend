@@ -12,11 +12,7 @@ const app = express()
 app.disable('x-powered-by')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(
-    cors({
-        origin: 'https://galartearte.com',
-    })
-)
+app.use(cors())
 app.use(
     fileUpload({
         useTempFiles: true,
