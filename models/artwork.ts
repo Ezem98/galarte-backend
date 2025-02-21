@@ -31,6 +31,44 @@ export class ArtworkModel {
         }
     }
 
+    static async getRandom() {
+        try {
+            const artworks = (
+                await db.execute({
+                    sql: `
+                    WITH distinct_artworks AS (
+                        SELECT * 
+                        FROM artworks 
+                        WHERE artistId IS NOT NULL
+                        GROUP BY artistId 
+                        ORDER BY RANDOM()
+                        LIMIT 7
+                    ),
+                    extra_artworks AS (
+                        SELECT * 
+                        FROM artworks 
+                        WHERE id NOT IN (SELECT id FROM distinct_artworks)
+                        ORDER BY RANDOM()
+                        LIMIT (7 - (SELECT COUNT(*) FROM distinct_artworks))
+                    )
+                    SELECT * FROM distinct_artworks
+                    UNION ALL
+                    SELECT * FROM extra_artworks;
+                    `,
+                    args: [],
+                })
+            ).rows
+
+            return {
+                successfully: true,
+                message: 'Featured artworks retrieved',
+                data: artworks,
+            }
+        } catch (error: any) {
+            return { successfully: false, message: error.message }
+        }
+    }
+
     static async getById(id: number) {
         try {
             const artwork = (

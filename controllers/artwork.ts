@@ -18,6 +18,13 @@ export class ArtworkController {
         res.json({ message, data })
     }
 
+    static async getRandom(req: Request, res: Response) {
+        const { successfully, message, data } = await ArtworkModel.getRandom()
+
+        if (!successfully) return res.status(400).send({ message })
+        return res.json({ message, data })
+    }
+
     static async getById(req: Request, res: Response) {
         const { id } = req.params
 

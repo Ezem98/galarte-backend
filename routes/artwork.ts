@@ -5,6 +5,8 @@ export const artworksRouter = Router()
 
 artworksRouter.get('/', ArtworkController.getAll)
 
+artworksRouter.get('/random', ArtworkController.getRandom)
+
 artworksRouter.get('/:id', ArtworkController.getById)
 
 artworksRouter.get('/artist/:artistId', ArtworkController.getByArtistId)
